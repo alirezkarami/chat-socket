@@ -1,37 +1,76 @@
 # Simple Chat Project with WebSocket (Daphne)
 
-This project is a simple chat service where users can communicate in a **public room** in **real-time**.  
-The implementation is **backend only**, and messages are exchanged instantly between users without storing them in a database.
+This project is a simple real-time chat backend built with Django, Channels, and Daphne.
+Users can register, authenticate via JWT, and join a public chat room where messages
+are exchanged instantly without being stored in the database.
 
----
+## Features
+- User registration and login
+- JWT-based authentication
+- Real-time public chat
+- WebSocket backend using Django Channels
+- ASGI server using Daphne
+- Swagger API documentation
 
-## Project Features
+## Project Structure
 
-- User registration and login (**Authentication**)
-- Session management with **JWT Token**
-- A public room for real-time messaging
-- WebSocket implementation using **Django Channels** and server run with **Daphne**
-- API documentation with **Swagger**
-
----
+├── account/  
+├── chat/  
+├── chat_sock/  
+├── manage.py  
+├── requirements.txt  
+└── README.md
 
 ## WebSocket Endpoint
+WebSocket URL:
+ws://localhost:8000/ws/chat/
 
-
-### Example Sent Message
+### Example: Client → Server (Valid JSON)
 ```json
 {
-    "message": "hello, how are you?",
-    "user": "alireza",
-    "time": "11/17/2025 21:14:34"
+  "message": "hello, how are you?"
 }
+```
+### Example: Server → Client (Valid JSON)
+```json
+{
+  "message": "hello, how are you?",
+  "username": "alireza",
+  "time": "11/17/2025 21:14:34"
+}
+```
+## Installation
 
+1. Clone the repository
+```
+git clone https://github.com/alirezkarami/chat-socket
+cd chat-socket
+```
 
-## Running the Project with Daphne
-
-1. **Install dependencies:**
-```bash
+2. Create virtual environment
+```
+python -m venv venv
+source venv/bin/activate     (Linux/macOS)
+venv\Scripts\activate        (Windows)
+```
+3. Install dependencies
+```
 pip install -r requirements.txt
+```
 
-```bash
+4. Apply migrations
+```
+python manage.py migrate
+```
+5. Optional: Create superuser
+```
+python manage.py createsuperuser
+```
+## Run With Daphne
 daphne -p 8000 chat_sock.asgi:application
+
+WebSocket available at:
+
+`ws://localhost:8000/ws/chat/`
+## Swagger Docs
+`http://localhost:8000/api/docs`
