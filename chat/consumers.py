@@ -1,20 +1,27 @@
 import json
-from channels.generic.websocket import AsyncWebsocketConsumer
-import logging
+from channels.generic.websocket import AsyncWebsocketConsumer, AsyncJsonWebsocketConsumer
 
 class ChatConsumer(AsyncWebsocketConsumer):
     
     async def connect(self):
+        user = self.scope["user"]
+        print(user.is_authenticated)
+        if user.is_authenticated:
+            await self.accept()
+       
+       
+        else:
+            await self.close()
+
+
         self.room_name = "public_room"
         self.room_group_name = "chat_%s" % self.room_name
 
-        # اضافه شدن به گروه
         await self.channel_layer.group_add(
             self.room_group_name,
             self.channel_name
         )
 
-        await self.accept()
 
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard(
