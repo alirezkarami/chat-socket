@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 from channels.generic.websocket import AsyncWebsocketConsumer, AsyncJsonWebsocketConsumer
 
 class ChatConsumer(AsyncWebsocketConsumer):
@@ -40,4 +41,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     async def chat_message(self, event):
         message = event['message']
-        await self.send(text_data=json.dumps({'message': message}))
+        await self.send(text_data=json.dumps({
+            "message": message,
+            "user": self.scope["user"].username,
+            "time": datetime.now().astimezone().strftime('%m/%d/%Y %H:%M:%S')
+            }))
