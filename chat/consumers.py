@@ -5,11 +5,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
     
     async def connect(self):
         user = self.scope["user"]
-        print(user.is_authenticated)
         if user.is_authenticated:
             await self.accept()
-       
-       
         else:
             await self.close()
 
